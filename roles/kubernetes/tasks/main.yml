@@ -1,0 +1,43 @@
+- name: setup ip forwarding
+  ansible.posix.sysctl:
+    sysctl_file: /etc/sysctl.d/99-kubernetes-ip-forward.conf
+    name: net.ipv4.ip_forward
+    value: '1'
+    sysctl_set: true
+    state: present
+    reload: true
+
+- name: add Kubernetes APT repository
+  ansible.builtin.deb822_repository:
+    name: kubernetes
+    types: deb
+    uris: https://pkgs.k8s.io/core:/stable:/v1.34/deb/
+    suites: /
+    components:
+    signed_by: "https://pkgs.k8s.io/core:/stable:/v1.34/deb/Release.key"
+    state: present
+
+- name: install packages
+  ansible.builtin.apt:
+    name:
+      - containerd
+      - apt-transport-https
+      - ca-certificates
+    state: latest
+
+- name: install packages but do not update
+  ansible.builtin.apt:
+    name:
+      - kubelet
+      - kubeadm
+      - kubectl
+    state: present
+
+- name: prevent packages from being upgraded
+  dpkg_selections:
+    name: "{{ item }}"
+    selection: hold
+  loop:
+    - kubelet
+    - kubeadm
+    - kubectl

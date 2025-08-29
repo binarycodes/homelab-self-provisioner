@@ -1,0 +1,5 @@
+- name: Ensure lingering enabled
+  command: "loginctl enable-linger {{ item }}"
+  args:
+    creates: /var/lib/systemd/linger/{{ item }}
+  with_items: "{{ users }}"

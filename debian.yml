@@ -1,0 +1,33 @@
+---
+- hosts: all
+  tasks:
+    - name: set normalized architecture fact
+      set_fact:
+        normalized_arch: >-
+          {{
+          'amd64' if ansible_architecture == 'x86_64' else
+          'arm64' if ansible_architecture == 'aarch64' else
+          ansible_architecture
+          }}
+
+- hosts: all
+  become: yes
+  roles:
+    - role: system
+      timezone: Europe/Helsinki
+      install_packages:
+        - git
+        - ansible
+        - gpg
+        - curl
+        - net-tools
+        - podman
+
+    - role: security
+      ssh_permit_root_login: "no"
+      ssh_restrict_accepted_pubkeys: true
+      ssh_service_name: "sshd"
+
+    - role: podman
+      users: 
+        - binarycodes
