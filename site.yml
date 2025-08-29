@@ -1,5 +1,5 @@
 ---
-- hosts: localhost
+- hosts: local
   tasks:
     - name: set normalized architecture fact
       set_fact:
@@ -10,7 +10,7 @@
           ansible_architecture
           }}
 
-- hosts: localhost
+- hosts: local
   become: yes
   roles:
     - system
