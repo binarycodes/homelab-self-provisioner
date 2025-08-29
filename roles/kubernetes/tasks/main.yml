@@ -17,6 +17,12 @@
     signed_by: "https://pkgs.k8s.io/core:/stable:/v1.34/deb/Release.key"
     state: present
 
+- name: Update apt repository cache
+  ansible.builtin.apt:
+    update_cache: yes
+    upgrade: yes
+    clean: yes
+
 - name: install packages
   ansible.builtin.apt:
     name:
