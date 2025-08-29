@@ -1,0 +1,15 @@
+---
+ssh_permit_root_login: no
+ssh_restrict_accepted_pubkeys: true
+
+allow_release_info_change: false
+timezone: Europe/Helsinki
+
+distro:
+  ssh_service_name:
+    Debian: sshd
+    Ubuntu: ssh
+
+install_packages:
+  - git
+  - ansible

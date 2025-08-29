@@ -1,0 +1,17 @@
+---
+- hosts: localhost
+  tasks:
+    - name: set normalized architecture fact
+      set_fact:
+        normalized_arch: >-
+          {{
+          'amd64' if ansible_architecture == 'x86_64' else
+          'arm64' if ansible_architecture == 'aarch64' else
+          ansible_architecture
+          }}
+
+- hosts: localhost
+  become: yes
+  roles:
+    - system
+    - security
