@@ -1,2 +1,3 @@
 ssh_permit_root_login: "no"
 ssh_restrict_accepted_pubkeys: true
+ssh_service_name: "sshd"
