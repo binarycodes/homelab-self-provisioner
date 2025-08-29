@@ -1,5 +1,5 @@
 ---
-ssh_permit_root_login: no
+ssh_permit_root_login: "no"
 ssh_restrict_accepted_pubkeys: true
 
 allow_release_info_change: false
