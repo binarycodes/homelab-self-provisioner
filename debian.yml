@@ -28,6 +28,3 @@
       ssh_restrict_accepted_pubkeys: true
       ssh_service_name: "sshd"
 
-    - role: podman
-      users: 
-        - binarycodes
