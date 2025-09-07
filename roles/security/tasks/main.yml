@@ -53,7 +53,7 @@
     mode: '0700'
 
 - name: request to sign the host key
-  ansible.builtin.command: /usr/local/sbin/ssh-keysigner -hostname {{ ansible_hostname }}  -keyfile /etc/ssh/ssh_host_ed25519_key.pub
+  ansible.builtin.command: /usr/local/sbin/ssh-keysigner -hostname {{ ansible_fqdn }}  -keyfile /etc/ssh/ssh_host_ed25519_key.pub
   args:
     creates: /etc/ssh/ssh_host_ed25519_key-cert.pub
 
