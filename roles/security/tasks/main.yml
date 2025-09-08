@@ -46,7 +46,7 @@
 
 - name: download ssh key signer
   ansible.builtin.get_url:
-    url: https://github.com/binarycodes/ssh-key-signer/releases/download/v0.0.1/ssh-keysign-linux-amd64-1.24
+    url: https://github.com/binarycodes/ssh-key-signer/releases/download/v0.0.3/ssh-keysign-linux-amd64-1.24
     dest: /usr/local/sbin/ssh-keysigner
     owner: root
     group: root
