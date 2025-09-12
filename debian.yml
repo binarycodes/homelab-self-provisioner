@@ -11,7 +11,8 @@
           }}
 
 - hosts: all
-  become: no
+  become: yes
+  become_user: "{{ target_user }}"
   roles:
     - role: userconfig
 
