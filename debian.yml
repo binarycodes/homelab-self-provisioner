@@ -11,6 +11,11 @@
           }}
 
 - hosts: all
+  become: no
+  roles:
+    - role: userconfig
+
+- hosts: all
   become: yes
   roles:
     - role: system

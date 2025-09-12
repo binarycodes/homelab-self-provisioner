@@ -1,5 +1,5 @@
+---
 - name: suppress login message (hushlogin)
-  become: false
   file:
     path: "~/.hushlogin"
     mode: 0644
