@@ -1,3 +1,5 @@
 ---
-- name: dummy worker action
-  ansible.builtin.command: echo "worker node" > /tmp/k8s-worker-node.log
+- name: dummy worker actio
+  ansible.builtin.copy:
+    dest: /tmp/k8s-worker-node.log
+    content: "kubernetes worker node"
