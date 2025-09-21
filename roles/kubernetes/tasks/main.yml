@@ -40,7 +40,7 @@
     state: present
 
 - name: prevent packages from being upgraded
-  dpkg_selections:
+  ansible.builtin.dpkg_selections:
     name: "{{ item }}"
     selection: hold
   loop:
