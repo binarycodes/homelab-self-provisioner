@@ -17,6 +17,16 @@
     signed_by: "https://pkgs.k8s.io/core:/stable:/v1.34/deb/Release.key"
     state: present
 
+- name: add Helm APT repository
+  ansible.builtin.deb822_repository:
+    name: helm
+    types: deb
+    uris: https://packages.buildkite.com/helm-linux/helm-debian/any/
+    suites: any
+    components: main
+    signed_by: "https://packages.buildkite.com/helm-linux/helm-debian/gpgkey"
+    state: present
+
 - name: Update apt repository cache
   ansible.builtin.apt:
     update_cache: yes
@@ -29,6 +39,7 @@
       - containerd
       - apt-transport-https
       - ca-certificates
+      - helm
     state: latest
 
 - name: install packages but do not update
@@ -47,3 +58,15 @@
     - kubelet
     - kubeadm
     - kubectl
+
+- name: containerd config
+  ansible.builtin.command: containerd config default > /etc/containerd/config.toml
+
+- name: enable systemd cgroup
+  ansible.builtin.lineinfile:
+    path: /etc/containerd/config.toml
+    regexp: '^(\s*)SystemdCgroup = false\s*$'
+    line: '\1SystemdCgroup = true'
+    state: present
+    backrefs: true
+    backup: true
