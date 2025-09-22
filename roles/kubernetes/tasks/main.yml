@@ -7,6 +7,17 @@
     state: present
     reload: true
 
+- name: add Docker repository for containerd.io
+  ansible.builtin.deb822_repository:
+    name: docker
+    types: deb
+    uris: "https://download.docker.com/linux/{{ ansible_distribution | lower }}"
+    suites: "{{ ansible_lsb.codename }}"
+    components: stable
+    architectures: "{{ normalized_arch }}"
+    signed_by: "https://download.docker.com/linux/{{ ansible_distribution | lower }}/gpg"
+    state: present
+
 - name: add Kubernetes APT repository
   ansible.builtin.deb822_repository:
     name: kubernetes
@@ -36,9 +47,9 @@
 - name: install packages
   ansible.builtin.apt:
     name:
-      - containerd
       - apt-transport-https
       - ca-certificates
+      - containerd.io
       - helm
     state: latest
 
@@ -76,3 +87,10 @@
     state: present
     backrefs: true
     backup: true
+
+- name: start containerd
+  ansible.builtin.systemd_service:
+    name: "containerd"
+    daemon_reload: true
+    state: restarted
+    enabled: true
