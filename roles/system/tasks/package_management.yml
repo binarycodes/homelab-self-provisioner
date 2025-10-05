@@ -6,7 +6,7 @@
     line: Acquire::AllowReleaseInfoChange::Codename "true";
   when: allow_release_info_change
 
-- name: Update apt repository cache
+- name: update apt repository cache
   ansible.builtin.apt:
     update_cache: yes
     upgrade: yes
@@ -15,3 +15,41 @@
   ansible.builtin.apt:
     name: "{{ install_packages }}"
     state: latest
+
+- name: install unattended-upgrades
+  ansible.builtin.apt:
+    name: unattended-upgrades
+    state: latest
+
+- name: enable APT periodic update
+  copy:
+    dest: /etc/apt/apt.conf.d/20auto-upgrades
+    mode: '0644'
+    content: |
+      APT::Periodic::Update-Package-Lists "1";
+      APT::Periodic::Unattended-Upgrade "1";
+
+- name: copy 50unattended-upgrades if missing
+  copy:
+    src: /usr/share/unattended-upgrades/50unattended-upgrades
+    dest: /etc/apt/apt.conf.d/50unattended-upgrades
+    mode: '0644'
+
+- name: Hard settings
+  blockinfile:
+    path: /etc/apt/apt.conf.d/50unattended-upgrades
+    marker: "# {mark} ANSIBLE managed unattended-upgrades"
+    block: |
+      Unattended-Upgrade::Automatic-Reboot "false";
+      Unattended-Upgrade::OnlyOnACPower "true";
+      Unattended-Upgrade::Remove-New-Unused-Dependencies "true";
+      Unattended-Upgrade::Remove-Unused-Kernel-Packages "true";
+      Unattended-Upgrade::Mail "root";
+      Unattended-Upgrade::MailReport "on-change";
+
+- name: enable unattended upgrades
+  ansible.builtin.systemd_service:
+    state: started
+    enabled: true
+    daemon_reload: true
+    name: "unattended-upgrades.service"
