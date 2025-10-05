@@ -22,27 +22,33 @@
     state: latest
 
 - name: enable APT periodic update
-  copy:
+  ansible.builtin.copy:
     dest: /etc/apt/apt.conf.d/20auto-upgrades
     mode: '0644'
     content: |
       APT::Periodic::Update-Package-Lists "1";
       APT::Periodic::Unattended-Upgrade "1";
 
-- name: copy 50unattended-upgrades if missing
-  copy:
-    src: /usr/share/unattended-upgrades/50unattended-upgrades
+- name: configure unattended upgrades
+  ansible.builtin.copy:
     dest: /etc/apt/apt.conf.d/50unattended-upgrades
     mode: '0644'
+    content: |
+      # ansible managed unattended-upgrades
 
-- name: Hard settings
-  blockinfile:
-    path: /etc/apt/apt.conf.d/50unattended-upgrades
-    marker: "# {mark} ANSIBLE managed unattended-upgrades"
-    block: |
-      Unattended-Upgrade::Automatic-Reboot "false";
+      Unattended-Upgrade::Origins-Pattern {
+        "origin=Debian,codename=${distro_codename},label=Debian";
+        "origin=Debian,codename=${distro_codename},label=Debian-Security";
+        "origin=Debian,codename=${distro_codename}-security,label=Debian-Security";
+      }
+
+      Unattended-Upgrade::AutoFixInterruptedDpkg "true";
+      Unattended-Upgrade::Automatic-Reboot "true";
+      Unattended-Upgrade::Automatic-Reboot-Time "02:00";
+      Unattended-Upgrade::Automatic-Reboot-WithUsers "true";
       Unattended-Upgrade::OnlyOnACPower "true";
       Unattended-Upgrade::Remove-New-Unused-Dependencies "true";
+      Unattended-Upgrade::Remove-Unused-Dependencies "true";
       Unattended-Upgrade::Remove-Unused-Kernel-Packages "true";
       Unattended-Upgrade::Mail "root";
       Unattended-Upgrade::MailReport "on-change";
