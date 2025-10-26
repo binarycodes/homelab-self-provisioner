@@ -74,12 +74,12 @@
   ansible.builtin.command:
     cmd: containerd config default
     creates: /etc/containerd/config.toml
-  register: result
+  register: kubernetes_containerd_config
 
 - name: write containerd config output to file
   ansible.builtin.copy:
     dest: /etc/containerd/config.toml
-    content: "{{ result.stdout }}"
+    content: "{{ kubernetes_containerd_config.stdout }}"
     mode: "0644"
 
 - name: enable systemd cgroup

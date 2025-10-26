@@ -22,8 +22,8 @@
   become: true
   roles:
     - role: system
-      timezone: Europe/Helsinki
-      install_packages:
+      system_timezone: Europe/Helsinki
+      system_install_packages:
         - git
         - ansible
         - gpg
@@ -33,4 +33,4 @@
         - systemd-container
 
     - role: security
-      ssh_service_name: "sshd"
+      security_ssh_service_name: "sshd"
