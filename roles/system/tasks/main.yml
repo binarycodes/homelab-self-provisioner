@@ -1,3 +1,3 @@
 ---
-- include_tasks: settings.yml
-- include_tasks: package_management.yml
+- ansible.builtin.include_tasks: settings.yml
+- ansible.builtin.include_tasks: package_management.yml

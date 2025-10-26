@@ -1,8 +1,8 @@
----
-- hosts: all
+- name: play for setting computed facts
+  hosts: all
   tasks:
     - name: set normalized architecture fact
-      set_fact:
+      ansible.builtin.set_fact:
         normalized_arch: >-
           {{
           'amd64' if ansible_architecture == 'x86_64' else
@@ -11,13 +11,13 @@
           }}
 
 - hosts: all
-  become: yes
+  become: true
   become_user: "{{ target_user }}"
   roles:
     - role: userconfig
 
 - hosts: all
-  become: yes
+  become: true
   roles:
     - role: system
       timezone: Europe/Helsinki
@@ -32,4 +32,3 @@
 
     - role: security
       ssh_service_name: "sshd"
-

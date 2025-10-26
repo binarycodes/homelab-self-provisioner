@@ -7,4 +7,5 @@
   ansible.builtin.lineinfile:
     path: /etc/profile
     line: export TERM=xterm
-    create: yes
+    mode: "0644"
+    create: true

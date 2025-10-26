@@ -40,9 +40,9 @@
 
 - name: Update apt repository cache
   ansible.builtin.apt:
-    update_cache: yes
-    upgrade: yes
-    clean: yes
+    update_cache: true
+    upgrade: true
+    clean: true
 
 - name: install packages
   ansible.builtin.apt:
@@ -51,7 +51,7 @@
       - ca-certificates
       - containerd.io
       - helm
-    state: latest
+    state: present
 
 - name: install packages but do not update
   ansible.builtin.apt:
