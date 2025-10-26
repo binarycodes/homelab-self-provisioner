@@ -73,8 +73,8 @@
 - name: containerd config
   ansible.builtin.command:
     cmd: containerd config default
-    creates: /etc/containerd/config.toml
   register: kubernetes_containerd_config
+  changed_when: false
 
 - name: write containerd config output to file
   ansible.builtin.copy:
