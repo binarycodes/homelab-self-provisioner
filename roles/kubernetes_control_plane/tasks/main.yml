@@ -1,3 +1,4 @@
 ---
 - name: pull config images
   ansible.builtin.command: kubeadm config images pull
+  changed_when: false
