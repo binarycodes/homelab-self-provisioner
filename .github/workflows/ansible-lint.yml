@@ -1,6 +1,7 @@
 name: ansible-lint
 on:
-  branches: "*"
+  push:
+    branches: [ '*' ]
 jobs:
   build:
     name: Ansible Lint
