@@ -1,5 +1,6 @@
 ---
-- hosts: all
+- name: set computed facts
+  hosts: all
   tasks:
     - name: set normalized architecture fact
       ansible.builtin.set_fact:
@@ -10,7 +11,8 @@
           ansible_architecture
           }}
 
-- hosts: all
+- name: basic configuration for all kubernetes nodes
+  hosts: all
   become: true
   roles:
     - role: kubernetes

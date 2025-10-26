@@ -1,4 +1,4 @@
-- name: play for setting computed facts
+- name: set computed facts
   hosts: all
   tasks:
     - name: set normalized architecture fact
@@ -10,13 +10,15 @@
           ansible_architecture
           }}
 
-- hosts: all
+- name: user level configurations
+  hosts: all
   become: true
   become_user: "{{ target_user }}"
   roles:
     - role: userconfig
 
-- hosts: all
+- name: basic configuration for all debian systems
+  hosts: all
   become: true
   roles:
     - role: system
