@@ -15,4 +15,4 @@
   hosts: all
   become: true
   roles:
-    - role: kubernetes-control-plane
+    - role: kubernetes_control_plane
