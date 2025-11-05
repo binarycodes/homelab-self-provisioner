@@ -20,13 +20,13 @@
   ansible.builtin.get_url:
     url: "https://github.com/binarycodes/ssh-key-signer/releases/download/{{ security_ssh_keysign_version }}/ssh-keysign-linux-amd64"
     checksum: "{{ security_ssh_keysign_checksum }}"
-    dest: /usr/local/sbin/ssh-keysigner
+    dest: /usr/local/sbin/ssh-keysign
     owner: root
     group: root
     mode: '0700'
 
 - name: request to sign the host key
-  ansible.builtin.command: /usr/local/sbin/ssh-keysigner host
+  ansible.builtin.command: /usr/local/sbin/ssh-keysign host
   args:
     creates: /etc/ssh/ssh_host_ed25519_key-cert.pub
 
