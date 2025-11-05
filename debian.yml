@@ -34,5 +34,5 @@
 
     - role: security
       security_ssh_service_name: "sshd"
-      security_ssh_keysign_version: "v0.0.6"
-      security_ssh_keysign_checksum: "sha256:114910dba68cb2cf7d572e738bf176a957ee8a1b2442d4a1c58d5571374c16ba"
+      security_ssh_keysign_version: "v0.0.7"
+      security_ssh_keysign_checksum: "sha256:c2217d2edd0be91c9ccd335908d032cd804576f43dffd9984e507c0db4a6d08a"
