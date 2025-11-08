@@ -1,0 +1,45 @@
+- name: remove DNS stub listener
+  ansible.builtin.lineinfile:
+    dest: /etc/systemd/resolved.conf
+    regexp: '^(#\s*)?DNSStubListener.*'
+    line: "DNSStubListener=no"
+    state: present
+    backup: yes
+  register: stublistener
+
+- name: restart resolved
+  ansible.builtin.systemd_service:
+    state: restarted
+    daemon_reload: true
+    name: systemd-resolved
+  when: stublistener.changed
+
+- name: add setup config file
+  ansible.builtin.copy:
+    src: powerdns/
+    dest: /etc/docker/powerdns/
+    owner: root
+    group: root
+    mode: "644"
+  notify:
+    - restart the service again
+
+- name: "copy config files"
+  ansible.builtin.template:
+    src: "{{item}}"
+    dest: "/etc/docker/powerdns/{{item}}"
+    owner: root
+    group: root
+    mode: 0644
+  loop:
+    - "docker-compose.yml"
+    - "pdns.conf"
+  notify:
+    - restart the service again
+
+- name: start the service
+  community.docker.docker_compose_v2:
+    project_src: /etc/docker/powerdns
+    wait: true
+    wait_timeout: 300
+    state: present
