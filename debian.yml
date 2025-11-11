@@ -33,9 +33,9 @@
         - net-tools
         - systemd-container
       system_sops_version: "3.11.0"
-      system_sops_deb_url: "https://github.com/getsops/sops/releases/download/v{{ sops_version }}/sops_{{ sops_version }}_amd64.deb"
+      system_sops_deb_url: "https://github.com/getsops/sops/releases/download/v{{ system_sops_version }}/sops_{{ system_sops_version }}_amd64.deb"
       system_sops_checksum_sha256: "0cba49ca030a77a86105104b54bfc5579d1edf4983e0efa43d046d8b9b95dd82"
-      system_sops_download_path: "/tmp/sops_{{ sops_version }}_amd64.deb"
+      system_sops_download_path: "/tmp/sops_{{ system_sops_version }}_amd64.deb"
 
     - role: security
       security_ssh_service_name: "sshd"

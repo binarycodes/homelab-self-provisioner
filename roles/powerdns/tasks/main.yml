@@ -7,6 +7,9 @@
     backup: true
   notify: restart resolved
 
+- name: Flush handlers
+  ansible.builtin.meta: flush_handlers
+
 - name: add setup config file
   ansible.builtin.copy:
     src: powerdns/
@@ -52,7 +55,7 @@
         rname: 'hostmaster.cloudyhome.net.'
     metadata:
       allow_axfr_from: ['10.88.16.12']
-  when: "{{ powerdns_master_node }}"
+  when: powerdns_master_node
 
 - name: create native zone
   kpfleming.powerdns_auth.zone:
@@ -71,7 +74,7 @@
         rname: 'hostmaster.cloudyhome.net.'
     metadata:
       axfr_source: '10.88.16.12'
-  when: "{{ powerdns_slave_node }}"
+  when: powerdns_slave_node
 
 - name: create A record for ns1
   kpfleming.powerdns_auth.rrset:
@@ -81,7 +84,7 @@
     type: A
     records:
       - content: 10.88.16.11
-  when: "{{ powerdns_master_node }}"
+  when: powerdns_master_node
 
 - name: create A record for ns2
   kpfleming.powerdns_auth.rrset:
@@ -91,4 +94,4 @@
     type: A
     records:
       - content: 10.88.16.12
-  when: "{{ powerdns_master_node }}"
+  when: powerdns_master_node

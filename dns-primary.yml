@@ -16,3 +16,5 @@
   roles:
     - role: docker
     - role: powerdns
+      powerdns_master_node: true
+      powerdns_slave_node: false
