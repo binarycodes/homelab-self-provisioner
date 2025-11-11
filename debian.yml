@@ -24,13 +24,18 @@
     - role: system
       system_timezone: Europe/Helsinki
       system_install_packages:
-        - git
+        - age
         - ansible
-        - gpg
-        - curl
-        - net-tools
         - bind9-dnsutils
+        - curl
+        - git
+        - gpg
+        - net-tools
         - systemd-container
+      sops_version: "3.11.0"
+      sops_deb_url: "https://github.com/getsops/sops/releases/download/v{{ sops_version }}/sops_{{ sops_version }}_amd64.deb"
+      sops_checksum_sha256: "0cba49ca030a77a86105104b54bfc5579d1edf4983e0efa43d046d8b9b95dd82"
+      sops_download_path: "/tmp/sops_{{ sops_version }}_amd64.deb"
 
     - role: security
       security_ssh_service_name: "sshd"
