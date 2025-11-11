@@ -3,7 +3,7 @@
   ansible.builtin.apt:
     name:
       - gpg
-    state: latest
+    state: present
 
 - name: add repository into sources list
   ansible.builtin.deb822_repository:

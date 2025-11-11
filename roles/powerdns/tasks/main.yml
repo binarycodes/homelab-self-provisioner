@@ -4,15 +4,8 @@
     regexp: '^(#\s*)?DNSStubListener.*'
     line: "DNSStubListener=no"
     state: present
-    backup: yes
-  register: stublistener
-
-- name: restart resolved
-  ansible.builtin.systemd_service:
-    state: restarted
-    daemon_reload: true
-    name: systemd-resolved
-  when: stublistener.changed
+    backup: true
+  notify: restart the service again
 
 - name: add setup config file
   ansible.builtin.copy:
@@ -20,17 +13,17 @@
     dest: /etc/docker/powerdns/
     owner: root
     group: root
-    mode: "644"
+    mode: "0644"
   notify:
     - restart the service again
 
 - name: "copy config files"
   ansible.builtin.template:
-    src: "{{item}}"
-    dest: "/etc/docker/powerdns/{{item}}"
+    src: "{{ item }}"
+    dest: "/etc/docker/powerdns/{{ item }}"
     owner: root
     group: root
-    mode: 0644
+    mode: "0644"
   loop:
     - "docker-compose.yml"
     - "pdns.conf"
