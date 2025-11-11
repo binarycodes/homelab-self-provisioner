@@ -5,7 +5,7 @@
     line: "DNSStubListener=no"
     state: present
     backup: true
-  notify: restart the service again
+  notify: restart resolved
 
 - name: add setup config file
   ansible.builtin.copy:
@@ -36,3 +36,59 @@
     wait: true
     wait_timeout: 300
     state: present
+
+- name: create native zone
+  kpfleming.powerdns_auth.zone:
+    name: cloudyhome.net.
+    state: present
+    api_key: 'secretapikey'
+    properties:
+      kind: 'Master'
+      nameservers:
+        - 'ns1.ip.cloudyhome.net'
+        - 'ns2.ip.cloudyhome.net'
+      soa:
+        mname: 'ns1.ip.cloudyhome.net.'
+        rname: 'hostmaster.cloudyhome.net.'
+    metadata:
+      allow_axfr_from: ['10.88.16.12']
+  when: "{{ powerdns_master_node }}"
+
+- name: create native zone
+  kpfleming.powerdns_auth.zone:
+    name: cloudyhome.net.
+    state: present
+    api_key: 'secretapikey'
+    properties:
+      kind: 'Slave'
+      masters:
+        - '10.88.16.11'
+      nameservers:
+        - 'ns1.ip.cloudyhome.net'
+        - 'ns2.ip.cloudyhome.net'
+      soa:
+        mname: 'ns1.ip.cloudyhome.net.'
+        rname: 'hostmaster.cloudyhome.net.'
+    metadata:
+      axfr_source: '10.88.16.12'
+  when: "{{ powerdns_slave_node }}"
+
+- name: create A record for ns1
+  kpfleming.powerdns_auth.rrset:
+    api_key: 'secretapikey'
+    zone_name: cloudyhome.net.
+    name: ns1.ip.cloudyhome.net.
+    type: A
+    records:
+      - content: 10.88.16.11
+  when: "{{ powerdns_master_node }}"
+
+- name: create A record for ns2
+  kpfleming.powerdns_auth.rrset:
+    api_key: 'secretapikey'
+    zone_name: cloudyhome.net.
+    name: ns2.ip.cloudyhome.net.
+    type: A
+    records:
+      - content: 10.88.16.12
+  when: "{{ powerdns_master_node }}"
