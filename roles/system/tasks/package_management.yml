@@ -32,7 +32,7 @@
 
 - name: configure unattended upgrades
   ansible.builtin.copy:
-    dest: /etc/apt/apt.conf.d/50unattended-upgrades
+    dest: /etc/apt/apt.conf.d/52unattended-upgrades
     mode: '0644'
     content: |
       # ansible managed unattended-upgrades
@@ -47,12 +47,12 @@
       Unattended-Upgrade::Automatic-Reboot "true";
       Unattended-Upgrade::Automatic-Reboot-Time "02:00";
       Unattended-Upgrade::Automatic-Reboot-WithUsers "true";
-      Unattended-Upgrade::OnlyOnACPower "true";
+      Unattended-Upgrade::OnlyOnACPower "false";
       Unattended-Upgrade::Remove-New-Unused-Dependencies "true";
       Unattended-Upgrade::Remove-Unused-Dependencies "true";
-      Unattended-Upgrade::Remove-Unused-Kernel-Packages "true";
       Unattended-Upgrade::Mail "root";
-      Unattended-Upgrade::MailReport "on-change";
+      Unattended-Upgrade::MailReport "only-on-error";
+      Unattended-Upgrade::MinimalSteps "true";
 
 - name: enable unattended upgrades
   ansible.builtin.systemd_service:
@@ -60,20 +60,3 @@
     enabled: true
     daemon_reload: true
     name: "unattended-upgrades.service"
-
-- name: download SOPS package and verify checksum
-  ansible.builtin.get_url:
-    url: "{{ system_sops_deb_url }}"
-    dest: "{{ system_sops_download_path }}"
-    checksum: "sha256:{{ system_sops_checksum_sha256 }}"
-    mode: '0644'
-
-- name: install SOPS package
-  ansible.builtin.apt:
-    deb: "{{ system_sops_download_path }}"
-    state: present
-
-- name: clean up downloaded file
-  ansible.builtin.file:
-    path: "{{ system_sops_download_path }}"
-    state: absent

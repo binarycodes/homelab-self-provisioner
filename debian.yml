@@ -25,19 +25,22 @@
       system_timezone: Europe/Helsinki
       system_install_packages:
         - age
-        - ansible
         - bind9-dnsutils
         - curl
         - git
         - gpg
         - net-tools
         - systemd-container
-      system_sops_version: "3.11.0"
-      system_sops_deb_url: "https://github.com/getsops/sops/releases/download/v{{ system_sops_version }}/sops_{{ system_sops_version }}_amd64.deb"
-      system_sops_checksum_sha256: "0cba49ca030a77a86105104b54bfc5579d1edf4983e0efa43d046d8b9b95dd82"
-      system_sops_download_path: "/tmp/sops_{{ system_sops_version }}_amd64.deb"
 
     - role: security
       security_ssh_service_name: "sshd"
       security_ssh_keysign_version: "v0.0.7"
       security_ssh_keysign_checksum: "sha256:c2217d2edd0be91c9ccd335908d032cd804576f43dffd9984e507c0db4a6d08a"
+
+    - role: sops
+      sops_version: "3.11.0"
+      sops_deb_url: "https://github.com/getsops/sops/releases/download/v{{ sops_version }}/sops_{{ sops_version }}_amd64.deb"
+      sops_checksum_sha256: "0cba49ca030a77a86105104b54bfc5579d1edf4983e0efa43d046d8b9b95dd82"
+      sops_download_path: "/tmp/sops_{{ sops_version }}_amd64.deb"
+
+    - role: infisical
