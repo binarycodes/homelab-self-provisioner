@@ -7,7 +7,7 @@
     backup: true
   notify: restart resolved
 
-- name: Flush handlers
+- name: flush handlers
   ansible.builtin.meta: flush_handlers
 
 - name: add setup config file

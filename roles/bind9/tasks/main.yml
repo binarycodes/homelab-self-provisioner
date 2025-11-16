@@ -1,0 +1,65 @@
+- name: remove DNS stub listener
+  ansible.builtin.lineinfile:
+    dest: /etc/systemd/resolved.conf
+    regexp: '^(#\s*)?DNSStubListener.*'
+    line: "DNSStubListener=no"
+    state: present
+    backup: true
+  notify: restart resolved
+
+- name: flush handlers
+  ansible.builtin.meta: flush_handlers
+
+- name: add setup config file
+  ansible.builtin.copy:
+    src: bind9/master/
+    dest: /etc/docker/bind9/
+    owner: root
+    group: root
+    mode: "0644"
+  when: bind9_master
+  notify:
+    - restart the service again
+
+- name: add setup config file
+  ansible.builtin.copy:
+    src: bind9/slave/
+    dest: /etc/docker/bind9/
+    owner: root
+    group: root
+    mode: "0644"
+  when: bind9_slave
+  notify:
+    - restart the service again
+
+- name: "copy config files"
+  ansible.builtin.template:
+    src: "{{ item }}"
+    dest: "/etc/docker/bind9/{{ item }}"
+    owner: root
+    group: root
+    mode: "0644"
+  loop:
+    - "docker-compose.yml"
+  notify:
+    - restart the service again
+
+- name: "copy key files"
+  ansible.builtin.template:
+    src: "{{ item }}"
+    dest: "/etc/docker/bind9/config/{{ item }}"
+    owner: root
+    group: root
+    mode: "0600"
+  loop:
+    - "named.conf.key"
+  notify:
+    - restart the service again
+
+
+- name: start the service
+  community.docker.docker_compose_v2:
+    project_src: /etc/docker/bind9
+    wait: true
+    wait_timeout: 300
+    state: present
