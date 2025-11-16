@@ -15,4 +15,5 @@
   hosts: all
   become: true
   roles:
+    - role: kubernetes
     - role: kubernetes_worker
