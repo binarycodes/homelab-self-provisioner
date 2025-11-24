@@ -10,29 +10,12 @@
 - name: flush handlers
   ansible.builtin.meta: flush_handlers
 
-- name: add setup config file
-  ansible.builtin.copy:
-    src: bind9/master/
-    dest: /etc/docker/bind9/
-    owner: root
-    group: root
-    mode: "0644"
-  when: bind9_master
-  notify:
-    - restart the service again
+- name: create the directory if required
+  ansible.builtin.file:
+    path: /etc/docker/bind9/config
+    state: directory
 
-- name: add setup config file
-  ansible.builtin.copy:
-    src: bind9/slave/
-    dest: /etc/docker/bind9/
-    owner: root
-    group: root
-    mode: "0644"
-  when: bind9_slave
-  notify:
-    - restart the service again
-
-- name: "copy config files"
+- name: copy config files
   ansible.builtin.template:
     src: "{{ item }}"
     dest: "/etc/docker/bind9/{{ item }}"
@@ -44,18 +27,72 @@
   notify:
     - restart the service again
 
-- name: "copy key files"
+- name: render zone files
   ansible.builtin.template:
-    src: "{{ item }}"
-    dest: "/etc/docker/bind9/config/{{ item }}"
+    src: zone-template.j2
+    dest: "/etc/docker/bind9/config/{{ item.name }}.zone"
     owner: root
     group: root
-    mode: "0600"
-  loop:
-    - "named.conf.key"
+    mode: "0644"
+  loop: "{{ bind9_zone }}"
+  when: bind9_master
   notify:
     - restart the service again
 
+- name: render TSIG keys
+  ansible.builtin.template:
+    src: tsig-keys-template.j2
+    dest: /etc/docker/bind9/config/tsig.keys
+    owner: root
+    group: root
+    mode: "0600"
+  when: bind9_master
+  notify:
+    - restart the service again
+
+- name: render zone master
+  ansible.builtin.template:
+    src: zone-master-template.j2
+    dest: /etc/docker/bind9/config/zone-master.conf
+    owner: root
+    group: root
+    mode: "0644"
+  when: bind9_master
+  notify:
+    - restart the service again
+
+- name: render zone slave
+  ansible.builtin.template:
+    src: zone-slave-template.j2
+    dest: /etc/docker/bind9/config/zone-slave.conf
+    owner: root
+    group: root
+    mode: "0644"
+  when: bind9_slave
+  notify:
+    - restart the service again
+
+- name: render named conf
+  ansible.builtin.template:
+    src: master-named-conf.j2
+    dest: /etc/docker/bind9/config/named.conf
+    owner: root
+    group: root
+    mode: "0644"
+  when: bind9_master
+  notify:
+    - restart the service again
+
+- name: render named conf
+  ansible.builtin.template:
+    src: slave-named-conf.j2
+    dest: /etc/docker/bind9/config/named.conf
+    owner: root
+    group: root
+    mode: "0644"
+  when: bind9_slave
+  notify:
+    - restart the service again
 
 - name: start the service
   community.docker.docker_compose_v2:

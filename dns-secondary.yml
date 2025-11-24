@@ -17,6 +17,8 @@
     - role: docker
 
     - role: bind9
-      bind9_timezone: Europe/Helsinki
+      bind9_zone: "{{ sops_dns.zone }}"
+      bind9_tsig: "{{ sops_dns.tsig }}"
+      bind9_timezone: "{{ sops_general.timezone }}"
       bind9_master: false
       bind9_slave: true

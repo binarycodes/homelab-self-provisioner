@@ -1,3 +1,5 @@
+include "/etc/bind/zone-slave.conf";
+
 acl internal {
     10.88.0.0/16;
 };
@@ -16,16 +18,4 @@ options {
 
         auth-nxdomain no;
         deny-answer-addresses { loopbacks; };
-};
-
-zone "cloudyhome.net" IN {
-     type slave;
-     file "/etc/bind/cloudyhome-net.zone";
-     masters { 10.88.16.11; };
-};
-
-zone "ip.cloudyhome.net." IN {
-     type slave;
-     file "/etc/bind/ip-cloudyhome-net.zone";
-     masters { 10.88.16.11; };
 };

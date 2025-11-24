@@ -1,2 +1,3 @@
 ---
-target_user: "binarycodes"
+sops_general: "{{ lookup('community.sops.sops', 'secrets/secrets.sops.yml') | ansible.builtin.from_yaml }}"
+sops_dns: "{{ lookup('community.sops.sops', 'secrets/dns.sops.yml') | ansible.builtin.from_yaml }}"
