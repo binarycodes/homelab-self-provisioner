@@ -13,7 +13,7 @@
 - name: user level configurations
   hosts: all
   become: true
-  become_user: "{{ target_user }}"
+  become_user: "{{ sops_general.target_user }}"
   roles:
     - role: userconfig
 
@@ -22,7 +22,7 @@
   become: true
   roles:
     - role: system
-      system_timezone: Europe/Helsinki
+      system_timezone: "{{ sops_general.timezone }}"
       system_install_packages:
         - age
         - bind9-dnsutils
