@@ -19,6 +19,8 @@
     - role: bind9
       bind9_zone: "{{ sops_dns.zone }}"
       bind9_tsig: "{{ sops_dns.tsig }}"
+      bind9_master_ip: "{{ sops_dns.master_ip }}"
+      bind9_slave_ip: "{{ sops_dns.slave_ip }}"
       bind9_timezone: "{{ sops_general.timezone }}"
       bind9_master: true
       bind9_slave: false
