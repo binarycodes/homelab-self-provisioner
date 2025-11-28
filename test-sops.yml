@@ -1,0 +1,52 @@
+- hosts: localhost
+  connection: local
+  gather_facts: false
+  become: false
+  tasks:
+    - name: Render zone
+      vars:
+        bind9_zone: "{{ sops_dns.zone }}"
+      ansible.builtin.template:
+        src: roles/bind9/templates/zone-template.j2
+        dest: "/tmp//{{ item.name }}.zone"
+        mode: "0600"
+      loop: "{{ bind9_zone }}"
+
+    - name: Render keys
+      vars:
+        bind9_tsig: "{{ sops_dns.tsig }}"
+      ansible.builtin.template:
+        src: roles/bind9/templates/tsig-keys-template.j2
+        dest: /tmp/tsig.keys
+        mode: "0600"
+
+    - name: render zone master
+      vars:
+        bind9_zone: "{{ sops_dns.zone }}"
+      ansible.builtin.template:
+        src: roles/bind9/templates/zone-master-template.j2
+        dest: /tmp/zone-master.conf
+        mode: "0600"
+
+    - name: render zone slave
+      vars:
+        bind9_zone: "{{ sops_dns.zone }}"
+        bind9_master_ip: "{{ sops_dns.master_ip }}"
+      ansible.builtin.template:
+        src: roles/bind9/templates/zone-slave-template.j2
+        dest: /tmp/zone-slave.conf
+        mode: "0600"
+
+    - name: render named conf
+      vars:
+        bind9_slave_ip: "{{ sops_dns.slave_ip }}"
+      ansible.builtin.template:
+        src: roles/bind9/templates/master-named-conf.j2
+        dest: /tmp/master-named.conf
+        mode: "0600"
+
+    - name: render named conf
+      ansible.builtin.template:
+        src: roles/bind9/templates/slave-named-conf.j2
+        dest: /tmp/slave-named.conf
+        mode: "0600"

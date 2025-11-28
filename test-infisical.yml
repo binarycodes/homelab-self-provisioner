@@ -1,0 +1,13 @@
+---
+- name: Test Infisical lookup locally
+  hosts: localhost
+  connection: local
+  gather_facts: false
+
+  vars:
+    secrets: "{{ lookup('env', 'test') }}"
+  tasks:
+    - name: Show structure
+      ansible.builtin.debug:
+        var: secrets
+      no_log: false
