@@ -1,0 +1,39 @@
+[Unit]
+Description=github ephemeral runner %i
+After=docker.service
+Requires=docker.service
+
+[Service]
+Type=simple
+EnvironmentFile=/etc/github-runner/env
+
+User=worker
+Group=worker
+SupplementaryGroups=docker
+
+NoNewPrivileges=yes
+PrivateTmp=yes
+ProtectSystem=full
+ProtectHome=yes
+ProtectControlGroups=yes
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectKernelLogs=yes
+RestrictRealtime=yes
+
+ExecStart=/usr/bin/docker run --rm \
+  --name gh-runner-%i \
+  --env GH_RUNNER_URL=${GH_RUNNER_URL} \
+  --env GH_RUNNER_TOKEN=${GH_RUNNER_TOKEN} \
+  --env GH_RUNNER_LABELS=${GH_RUNNER_LABELS} \
+  binarycodes/homelab-github-runner:latest
+
+Restart=always
+RestartSec=5
+
+StandardOutput=journal
+StandardError=journal
+LogLevelMax=info
+
+[Install]
+WantedBy=multi-user.target

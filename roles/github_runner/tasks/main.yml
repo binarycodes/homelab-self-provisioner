@@ -1,0 +1,50 @@
+- name : install packages
+  ansible.builtin.apt:
+    pkg:
+      - ca-certificates
+      - curl
+    state: present
+
+- name: create worker user
+  ansible.builtin.user:
+    name: worker
+    shell: /usr/sbin/nologin
+    password_lock: true
+    create_home: false
+    append: true
+    groups: docker
+
+- name: create github runner config dir
+  ansible.builtin.file:
+    path: /etc/github-runner
+    state: directory
+    owner: root
+    group: root
+    mode: "0700"
+
+- name: copy runner environment settings file
+  ansible.builtin.template:
+    src: env.j2
+    dest: /etc/github-runner/env
+    owner: root
+    group: root
+    mode: '0600'
+
+- name: copy systemd unit file
+  ansible.builtin.copy:
+    src: gh-runner@.service
+    dest: /etc/systemd/system/gh-runner@.service
+    owner: root
+    group: root
+    mode: "644"
+
+- name: enable and start github ephemeral runner instances
+  ansible.builtin.systemd_service:
+    state: started
+    enabled: true
+    daemon_reload: true
+    name: 'gh-runner@{{ item }}.service'
+  with_items:
+    - 1
+    - 2
+    - 3

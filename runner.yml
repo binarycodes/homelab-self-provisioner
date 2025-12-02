@@ -1,0 +1,20 @@
+- name: set computed facts
+  hosts: all
+  tasks:
+    - name: set normalized architecture fact
+      ansible.builtin.set_fact:
+        normalized_arch: >-
+          {{
+          'amd64' if ansible_architecture == 'x86_64' else
+          'arm64' if ansible_architecture == 'aarch64' else
+          ansible_architecture
+          }}
+
+- name: configure primary dns server
+  hosts: all
+  become: true
+  roles:
+    - role: docker
+    - role: github_runner
+      github_runner_url: "{{ sops_gh.gh_runner_url }}"
+      github_runner_token: "{{ sops_gh.gh_runner_token }}"
