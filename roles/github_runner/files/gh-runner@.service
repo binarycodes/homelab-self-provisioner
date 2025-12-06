@@ -26,6 +26,10 @@ ExecStart=/usr/bin/docker run --rm \
   --env GH_RUNNER_URL=${GH_RUNNER_URL} \
   --env GH_RUNNER_TOKEN=${GH_RUNNER_TOKEN} \
   --env GH_RUNNER_LABELS=${GH_RUNNER_LABELS} \
+  --env GH_APP_ID=${GH_APP_ID} \
+  --env GH_APP_INSTALLATION_ID=${GH_APP_INSTALLATION_ID} \
+  --env GH_APP_PRIVATE_KEY_FILE=${GH_APP_PRIVATE_KEY_FILE} \
+  -v /etc/github-runner/app.private-key.pem:/etc/github-runner/app.private-key.pem:ro \
   binarycodes/homelab-github-runner:latest
 
 Restart=always

@@ -30,6 +30,14 @@
     group: root
     mode: '0600'
 
+- name: copy app private key
+  ansible.builtin.copy:
+    dest: /etc/github-runner/app.private-key.pem
+    owner: root
+    group: root
+    mode: "644"
+    content: "{{ github_runner_private_key }}"
+
 - name: copy systemd unit file
   ansible.builtin.copy:
     src: gh-runner@.service
