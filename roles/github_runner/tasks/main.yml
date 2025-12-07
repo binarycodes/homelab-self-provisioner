@@ -1,4 +1,4 @@
-- name : install packages
+- name: install packages
   ansible.builtin.apt:
     pkg:
       - ca-certificates
