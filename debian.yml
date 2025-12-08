@@ -33,6 +33,7 @@
   become: true
   roles:
     - role: system
+      system_allow_release_info_change: false
       system_timezone: "{{ sops_general.timezone }}"
       system_install_packages:
         - age

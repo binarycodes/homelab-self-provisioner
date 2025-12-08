@@ -1,4 +1,0 @@
-system_allow_release_info_change: false
-system_timezone: UTC
-system_install_packages:
-  - curl
