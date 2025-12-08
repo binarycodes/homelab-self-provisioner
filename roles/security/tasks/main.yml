@@ -29,6 +29,7 @@
   ansible.builtin.command: /usr/local/sbin/ssh-keysign host
   args:
     creates: /etc/ssh/ssh_host_ed25519_key-cert.pub
+  when: security_ssh_keysign_generate_certificate
 
 - name: present the HostCertificate
   ansible.builtin.copy:
@@ -38,4 +39,5 @@
     mode: '0644'
     content: |
       HostCertificate /etc/ssh/ssh_host_ed25519_key-cert.pub
+  when: security_ssh_keysign_generate_certificate
   notify: restart sshd
