@@ -10,17 +10,6 @@
           ansible_architecture
           }}
 
-- name: pre-requisite packages for secret management
-  hosts: all
-  become: true
-  roles:
-    - role: infisical
-    - role: sops
-      sops_version: "3.11.0"
-      sops_deb_url: "https://github.com/getsops/sops/releases/download/v{{ sops_version }}/sops_{{ sops_version }}_amd64.deb"
-      sops_checksum_sha256: "0cba49ca030a77a86105104b54bfc5579d1edf4983e0efa43d046d8b9b95dd82"
-      sops_download_path: "/tmp/sops_{{ sops_version }}_amd64.deb"
-
 - name: user level configurations
   hosts: all
   become: true
@@ -32,21 +21,6 @@
   hosts: all
   become: true
   roles:
-    - role: system
-      system_allow_release_info_change: false
-      system_timezone: "{{ sops_general.timezone }}"
-      system_install_packages:
-        - age
-        - bind9-dnsutils
-        - curl
-        - git
-        - gpg
-        - net-tools
-        - systemd-container
-
-    - role: security
-      security_ssh_service_name: "sshd"
-
     - role: ssh_keysign
       ssh_keysign_ssh_service_name: "sshd"
       ssh_keysign_version: "0.0.7"

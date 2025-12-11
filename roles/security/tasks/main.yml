@@ -15,29 +15,3 @@
       PubkeyAcceptedAlgorithms ssh-ed25519-cert-v01@openssh.com,rsa-sha2-512-cert-v01@openssh.com
       HostKeyAlgorithms ssh-ed25519-cert-v01@openssh.com
   notify: restart sshd
-
-- name: download ssh key signer
-  ansible.builtin.get_url:
-    url: "https://github.com/binarycodes/ssh-key-signer/releases/download/{{ security_ssh_keysign_version }}/ssh-keysign-linux-amd64"
-    checksum: "{{ security_ssh_keysign_checksum }}"
-    dest: /usr/local/sbin/ssh-keysign
-    owner: root
-    group: root
-    mode: '0700'
-
-- name: request to sign the host key
-  ansible.builtin.command: /usr/local/sbin/ssh-keysign host
-  args:
-    creates: /etc/ssh/ssh_host_ed25519_key-cert.pub
-  when: security_ssh_certificate
-
-- name: present the HostCertificate
-  ansible.builtin.copy:
-    dest: /etc/ssh/sshd_config.d/01_host_certificate.conf
-    owner: root
-    group: root
-    mode: '0644'
-    content: |
-      HostCertificate /etc/ssh/ssh_host_ed25519_key-cert.pub
-  when: security_ssh_certificate
-  notify: restart sshd

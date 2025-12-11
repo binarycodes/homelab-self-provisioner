@@ -1,0 +1,30 @@
+- name: install ssh-keysign from github release
+  ansible.builtin.apt:
+    deb: "https://github.com/binarycodes/ssh-key-signer/releases/download/v{{ ssh_keysign_version }}/ssh-keysign_{{ ssh_keysign_version }}_amd64.deb"
+    state: present
+
+- name: download ssh key signer
+  ansible.builtin.get_url:
+    url: "https://github.com/binarycodes/ssh-key-signer/releases/download/v{{ ssh_keysign_version }}/ssh-keysign-linux-amd64"
+    checksum: "{{ ssh_keysign_checksum }}"
+    dest: /usr/local/sbin/ssh-keysign
+    owner: root
+    group: root
+    mode: '0700'
+
+- name: request to sign the host key
+  ansible.builtin.command: /usr/local/sbin/ssh-keysign host
+  args:
+    creates: /etc/ssh/ssh_host_ed25519_key-cert.pub
+  when: ssh_keysign_certificate
+
+- name: present the host certificate
+  ansible.builtin.copy:
+    dest: /etc/ssh/sshd_config.d/01_host_certificate.conf
+    owner: root
+    group: root
+    mode: '0644'
+    content: |
+      HostCertificate /etc/ssh/ssh_host_ed25519_key-cert.pub
+  when: ssh_keysign_certificate
+  notify: restart sshd
