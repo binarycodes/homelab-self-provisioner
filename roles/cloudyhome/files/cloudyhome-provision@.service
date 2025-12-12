@@ -1,0 +1,18 @@
+[Unit]
+Description=CloudyHome self provisioning for %i
+Requires=cloudyhome-sync.service
+Wants=network-online.target
+After=network-online.target cloudyhome-sync.service
+ConditionPathExists=/var/lib/cloudyhome/ansible/%i.yml
+ConditionPathExists=/var/lib/cloudyhome/ansible/requirements.yml
+
+[Service]
+Type=oneshot
+Environment=DEBIAN_FRONTEND=noninteractive
+WorkingDirectory=/var/lib/cloudyhome/ansible
+ExecStartPre=/usr/bin/ansible-galaxy install -r requirements.yml
+ExecStart=/usr/bin/ansible-playbook %i.yml
+ExecStartPost=/usr/bin/touch /var/lib/cloudyhome/ansible-pull.%i.done
+
+[Install]
+WantedBy=multi-user.target

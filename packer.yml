@@ -1,15 +1,3 @@
-- name: set computed facts
-  hosts: all
-  tasks:
-    - name: set normalized architecture fact
-      ansible.builtin.set_fact:
-        normalized_arch: >-
-          {{
-          'amd64' if ansible_architecture == 'x86_64' else
-          'arm64' if ansible_architecture == 'aarch64' else
-          ansible_architecture
-          }}
-
 - name: pre-requisite packages for secret management
   hosts: all
   become: true
@@ -29,11 +17,13 @@
       system_timezone: "Europe/Helsinki"
       system_install_packages:
         - age
+        - ansible-core
         - bind9-dnsutils
         - curl
         - git
         - gpg
         - net-tools
+        - qemu-guest-agent
         - systemd-container
 
     - role: security
@@ -46,3 +36,4 @@
       ssh_keysign_certificate: false
 
     - role: docker
+    - role: cloudyhome
