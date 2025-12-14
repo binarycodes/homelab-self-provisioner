@@ -3,28 +3,23 @@
     deb: "https://github.com/binarycodes/ssh-key-signer/releases/download/v{{ ssh_keysign_version }}/ssh-keysign_{{ ssh_keysign_version }}_amd64.deb"
     state: present
 
-- name: download ssh key signer
-  ansible.builtin.get_url:
-    url: "https://github.com/binarycodes/ssh-key-signer/releases/download/v{{ ssh_keysign_version }}/ssh-keysign-linux-amd64"
-    checksum: "{{ ssh_keysign_checksum }}"
-    dest: /usr/local/sbin/ssh-keysign
-    owner: root
-    group: root
-    mode: '0700'
-
-- name: request to sign the host key
-  ansible.builtin.command: /usr/local/sbin/ssh-keysign host
-  args:
-    creates: /etc/ssh/ssh_host_ed25519_key-cert.pub
-  when: ssh_keysign_certificate
-
-- name: present the host certificate
+- name: copy systemd unit files
   ansible.builtin.copy:
-    dest: /etc/ssh/sshd_config.d/01_host_certificate.conf
+    src: "{{ item }}"
+    dest: "/etc/systemd/system/{{ item }}"
     owner: root
     group: root
-    mode: '0644'
-    content: |
-      HostCertificate /etc/ssh/ssh_host_ed25519_key-cert.pub
-  when: ssh_keysign_certificate
-  notify: restart sshd
+    mode: "644"
+  notify: restart resolved
+  with_items:
+    - ssh-keysign.service
+    - ssh-keysign.timer
+
+- name: enable and start service and timer
+  ansible.builtin.systemd_service:
+    enabled: true
+    daemon_reload: true
+    name: '{{ item }}'
+  with_items:
+    - ssh-keysign.service
+    - ssh-keysign.timer

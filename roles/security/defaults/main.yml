@@ -1,3 +1,0 @@
-security_ssh_service_name: "sshd"
-security_ssh_keysign_version: "v0.0.5"
-security_ssh_keysign_checksum: "sha256:c48c38fd6d74f30b397359f630b677573fae7ddc39c75576f3e8cbfec8e1981e"
