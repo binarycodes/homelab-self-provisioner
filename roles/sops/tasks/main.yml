@@ -1,17 +1,5 @@
 ---
-- name: download SOPS package and verify checksum
-  ansible.builtin.get_url:
-    url: "{{ sops_deb_url }}"
-    dest: "{{ sops_download_path }}"
-    checksum: "sha256:{{ sops_checksum_sha256 }}"
-    mode: '0644'
-
 - name: install SOPS package
   ansible.builtin.apt:
-    deb: "{{ sops_download_path }}"
+    deb: "https://github.com/getsops/sops/releases/download/v{{ sops_version }}/sops_{{ sops_version }}_amd64.deb"
     state: present
-
-- name: clean up downloaded file
-  ansible.builtin.file:
-    path: "{{ sops_download_path }}"
-    state: absent
