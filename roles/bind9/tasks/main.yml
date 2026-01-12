@@ -37,6 +37,7 @@
     owner: root
     group: root
     mode: "0644"
+    force: false
   loop: "{{ bind9_zone }}"
   when: bind9_master
   notify:
