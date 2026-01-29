@@ -23,3 +23,7 @@
     - role: immich
       immich_db_password: "{{ sops_app.immich_db_password }}"
       immich_timezone: "{{ sops_general.timezone }}"
+
+    - role: caddy_lab
+      porkbun_api_key: "{{ sops_dns.porkbun_api_key }}"
+      porkbun_secret_api_key: "{{ sops_dns.porkbun_secret_api_key }}"
