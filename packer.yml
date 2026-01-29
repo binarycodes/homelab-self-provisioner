@@ -20,6 +20,7 @@
         - git
         - gpg
         - net-tools
+        - nfs-common
         - qemu-guest-agent
         - systemd-container
 
