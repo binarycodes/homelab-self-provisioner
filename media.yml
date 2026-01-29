@@ -1,0 +1,25 @@
+- name: set computed facts
+  hosts: all
+  tasks:
+    - name: set normalized architecture fact
+      ansible.builtin.set_fact:
+        normalized_arch: >-
+          {{
+          'amd64' if ansible_architecture == 'x86_64' else
+          'arm64' if ansible_architecture == 'aarch64' else
+          ansible_architecture
+          }}
+
+- name: configure media server
+  hosts: all
+  become: true
+  roles:
+    - role: nfs
+      nfs_mountpoint: /srv/immich/library/
+      nfs_unit_name: srv-immich-library
+      nfs_server: "{{ sops_app.immich_nfs_server }}"
+      nfs_export: "{{ sops_app.immich_nfs_export }}"
+
+    - role: immich
+      immich_db_password: "{{ sops_app.immich_db_password }}"
+      immich_timezone: "{{ sops_general.timezone }}"

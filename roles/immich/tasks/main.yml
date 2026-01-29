@@ -1,0 +1,34 @@
+- name: create the directory if required
+  ansible.builtin.file:
+    path: /etc/docker/immich
+    state: directory
+    owner: root
+    group: root
+    mode: '0755'
+
+- name: add docker compose file
+  ansible.builtin.copy:
+    src: immich/
+    dest: /etc/docker/immich/
+    owner: root
+    group: root
+    mode: "0644"
+  notify:
+    - restart the service again
+
+- name: copy env file
+  ansible.builtin.template:
+    src: env.j2
+    dest: "/etc/docker/immich/.env"
+    owner: root
+    group: root
+    mode: "0644"
+  notify:
+    - restart the service again
+
+- name: start the service
+  community.docker.docker_compose_v2:
+    project_src: /etc/docker/immich
+    wait: true
+    wait_timeout: 300
+    state: present

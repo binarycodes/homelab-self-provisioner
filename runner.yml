@@ -14,7 +14,6 @@
   hosts: all
   become: true
   roles:
-    - role: docker
     - role: github_runner
       github_runner_url: "{{ sops_gh.gh_runner_url }}"
       github_runner_token: "{{ sops_gh.gh_runner_token }}"
