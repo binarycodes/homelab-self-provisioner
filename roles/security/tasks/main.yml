@@ -17,3 +17,10 @@
       PrintMotd no
       PrintLastLog no
   notify: restart sshd
+
+# https://dfir.ch/posts/today_i_learned_binfmt_misc/
+- name: mask systemd-binfmt.service
+  ansible.builtin.systemd_service:
+    name: systemd-binfmt.service
+    enabled: false
+    masked: true
