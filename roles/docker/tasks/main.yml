@@ -3,6 +3,7 @@
   ansible.builtin.apt:
     name:
       - gpg
+      - python3-debian
     state: present
 
 - name: add repository into sources list
