@@ -21,6 +21,7 @@
   with_items:
     - cloudyhome-sync.service
     - cloudyhome-provision@.service
+    - cloudyhome-provision@.timer
 
 - name: copy git sync script
   ansible.builtin.template:
