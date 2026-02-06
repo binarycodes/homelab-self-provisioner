@@ -5,8 +5,8 @@ Wants=network-online.target
 
 [Service]
 Type=oneshot
-ExecStartPre=/usr/bin/mkdir -p /var/lib/cloudyhome/ansible
-ExecStart=/usr/local/libexec/cloudyhome-sync/git-sync.sh
+ExecStartPre=/usr/bin/mkdir -p "{{ cloudyhome_base_path }}"/ansible
+ExecStart="{{ cloudyhome_base_path }}"/git-sync.sh
 
 [Install]
 WantedBy=multi-user.target

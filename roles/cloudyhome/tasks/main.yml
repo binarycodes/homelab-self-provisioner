@@ -6,12 +6,12 @@
     group: root
     mode: "0700"
   with_items:
-    - /usr/local/libexec/cloudyhome-sync
+    - "{{ cloudyhome_base_path }}"
     - /etc/sops/age
     - /etc/ssh-keysign
 
 - name: copy systemd unit files
-  ansible.builtin.copy:
+  ansible.builtin.template:
     src: "{{ item }}"
     dest: "/etc/systemd/system/{{ item }}"
     owner: root
@@ -23,9 +23,9 @@
     - cloudyhome-provision@.service
 
 - name: copy git sync script
-  ansible.builtin.copy:
+  ansible.builtin.template:
     src: git-sync.sh
-    dest: /usr/local/libexec/cloudyhome-sync/git-sync.sh
+    dest: "{{ cloudyhome_base_path }}/git-sync.sh"
     owner: root
     group: root
     mode: "750"
