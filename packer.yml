@@ -23,6 +23,14 @@
         - nfs-common
         - qemu-guest-agent
         - systemd-container
+      system_remove_packages:
+        - man-db
+        - manpages
+        - nano
+        - reportbug
+        - screen
+        - vim
+        - vim-tiny
 
     - role: security
       security_ssh_service_name: "sshd"

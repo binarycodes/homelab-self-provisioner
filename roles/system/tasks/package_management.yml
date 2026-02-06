@@ -11,24 +11,30 @@
   ansible.builtin.apt:
     update_cache: true
     upgrade: true
-
-- name: install packages
-  ansible.builtin.apt:
-    name: "{{ system_install_packages }}"
-    state: present
+    autoclean: true
+    autoremove: true
 
 - name: install unattended-upgrades
   ansible.builtin.apt:
     name: unattended-upgrades
     state: present
+    autoremove: true
 
 - name: enable APT periodic update
   ansible.builtin.copy:
-    dest: /etc/apt/apt.conf.d/20auto-upgrades
+    dest: /etc/apt/apt.conf.d/10auto-upgrades
     mode: '0644'
     content: |
       APT::Periodic::Update-Package-Lists "1";
       APT::Periodic::Unattended-Upgrade "1";
+
+- name: ignore all install recommends and suggestions
+  ansible.builtin.copy:
+    dest: /etc/apt/apt.conf.d/90no-recommends
+    mode: '0644'
+    content: |
+      APT::Install-Recommends "false";
+      APT::Install-Suggests "false";
 
 - name: configure unattended upgrades
   ansible.builtin.copy:
@@ -66,3 +72,18 @@
     enabled: true
     daemon_reload: true
     name: "unattended-upgrades.service"
+
+- name: install packages
+  ansible.builtin.apt:
+    name: "{{ system_install_packages }}"
+    state: present
+    autoremove: true
+    install_recommends: false
+
+- name: remove packages
+  ansible.builtin.apt:
+    name: "{{ system_remove_packages | default([]) }}"
+    state: absent
+    purge: true
+    autoremove: true
+  when: system_remove_packages | default([]) | length > 0
