@@ -1,5 +1,27 @@
-- name: Ensure lingering enabled
-  ansible.builtin.command: "loginctl enable-linger {{ item }}"
-  args:
-    creates: /var/lib/systemd/linger/{{ item }}
-  with_items: "{{ users }}"
+- name: create config directories
+  ansible.builtin.file:
+    path: /etc/containers/containers.conf.d
+    state: directory
+    owner: root
+    group: root
+    mode: "0644"
+
+- name: change default subnet configuration
+  ansible.builtin.copy:
+    src: 10-network.conf
+    dest: /etc/containers/containers.conf.d/
+    owner: root
+    group: root
+    mode: "644"
+
+- name: install podman and related packages
+  ansible.builtin.apt:
+    name: "{{ item }}"
+    state: present
+    autoremove: true
+    install_recommends: false
+  with_items:
+    - podman
+    - aardvark-dns
+    - catatonit
+    - passt
