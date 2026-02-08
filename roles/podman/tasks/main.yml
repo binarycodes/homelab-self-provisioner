@@ -16,12 +16,7 @@
 
 - name: install podman and related packages
   ansible.builtin.apt:
-    name: "{{ item }}"
+    name: "{{ podman_packages }}"
     state: present
     autoremove: true
     install_recommends: false
-  with_items:
-    - podman
-    - aardvark-dns
-    - catatonit
-    - passt
