@@ -7,7 +7,7 @@
     mode: "0644"
 
 - name: change default subnet configuration
-  ansible.builtin.copy:
+  ansible.builtin.template:
     src: 10-network.conf
     dest: /etc/containers/containers.conf.d/
     owner: root
