@@ -6,7 +6,7 @@
     group: root
     mode: "644"
   notify:
-    - restart the service again
+    - restart caddy
 
 - name: add the caddy config files
   ansible.builtin.template:
@@ -16,7 +16,7 @@
     group: root
     mode: "600"
   notify:
-    - restart the service again
+    - restart caddy
 
 - name: start the service
   community.docker.docker_compose_v2:

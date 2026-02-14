@@ -14,7 +14,7 @@
     group: root
     mode: "0644"
   notify:
-    - restart the service again
+    - restart immich
 
 - name: copy env file
   ansible.builtin.template:
@@ -24,7 +24,7 @@
     group: root
     mode: "0644"
   notify:
-    - restart the service again
+    - restart immich
 
 - name: copy immich frame settings file
   ansible.builtin.template:
@@ -34,7 +34,7 @@
     group: root
     mode: "0644"
   notify:
-    - restart the service again
+    - restart immich
 
 - name: start the service
   community.docker.docker_compose_v2:
