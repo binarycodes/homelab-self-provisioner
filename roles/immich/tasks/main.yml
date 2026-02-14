@@ -26,6 +26,16 @@
   notify:
     - restart the service again
 
+- name: copy immich frame settings file
+  ansible.builtin.template:
+    src: Settings.yml.j2
+    dest: "/etc/docker/immich/Settings.yml"
+    owner: root
+    group: root
+    mode: "0644"
+  notify:
+    - restart the service again
+
 - name: start the service
   community.docker.docker_compose_v2:
     project_src: /etc/docker/immich
