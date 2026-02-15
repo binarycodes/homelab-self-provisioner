@@ -69,6 +69,7 @@ services:
       - "8080:8080"
     environment:
       IMMICHFRAME_CONFIG_PATH: "/app/Config"
+      TZ: "${TZ}"
 
 volumes:
   model-cache:
