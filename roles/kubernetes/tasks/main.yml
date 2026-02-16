@@ -22,10 +22,10 @@
   ansible.builtin.deb822_repository:
     name: kubernetes
     types: deb
-    uris: https://pkgs.k8s.io/core:/stable:/v1.34/deb/
+    uris: https://pkgs.k8s.io/core:/stable:/v1.35/deb/
     suites: /
     components:
-    signed_by: "https://pkgs.k8s.io/core:/stable:/v1.34/deb/Release.key"
+    signed_by: "https://pkgs.k8s.io/core:/stable:/v1.35/deb/Release.key"
     state: present
 
 - name: add Helm APT repository
