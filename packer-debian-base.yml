@@ -38,7 +38,4 @@
     - role: ssh_keysign
       ssh_keysign_version: "0.0.9"
 
-    - role: docker
-    - role: podman
-      podman_default_subnet: "172.18.18.0/24"
     - role: cloudyhome
