@@ -6,14 +6,13 @@
       ansible.builtin.set_fact:
         normalized_arch: >-
           {{
-          'amd64' if ansible_architecture == 'x86_64' else
-          'arm64' if ansible_architecture == 'aarch64' else
-          ansible_architecture
+          'amd64' if ansible_facts['architecture'] == 'x86_64' else
+          'arm64' if ansible_facts['architecture'] == 'aarch64' else
+          ansible_facts['architecture']
           }}
 
 - name: configure host as a kubernetes control plane
   hosts: all
   become: true
   roles:
-    - role: kubernetes
     - role: kubernetes_control_plane
