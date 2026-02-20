@@ -22,6 +22,7 @@ ProtectKernelLogs=yes
 RestrictRealtime=yes
 
 ExecStart=/usr/bin/docker run --rm \
+  --pull=always \
   --name gh-runner-%i \
   --env GH_RUNNER_URL=${GH_RUNNER_URL} \
   --env GH_RUNNER_TOKEN=${GH_RUNNER_TOKEN} \
