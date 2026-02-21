@@ -37,6 +37,6 @@
       security_ssh_service_name: "sshd"
 
     - role: ssh_keysign
-      ssh_keysign_version: "0.0.9"
+      ssh_keysign_version: "0.0.10"
 
     - role: cloudyhome

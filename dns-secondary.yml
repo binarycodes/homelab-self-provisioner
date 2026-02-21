@@ -14,8 +14,6 @@
   hosts: all
   become: true
   roles:
-    - role: docker
-
     - role: bind9
       bind9_zone: "{{ sops_dns.zone }}"
       bind9_tsig: "{{ sops_dns.tsig }}"
