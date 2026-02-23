@@ -26,6 +26,7 @@
       immich_server_url: "{{ sops_app.immich_server_url }}"
       immich_frame_api_key: "{{ sops_app.immich_frame_api_key }}"
 
-    - role: caddy_lab
-      porkbun_api_key: "{{ sops_dns.porkbun_api_key }}"
-      porkbun_secret_api_key: "{{ sops_dns.porkbun_secret_api_key }}"
+    - role: caddy
+      caddy_caddyfile_template: "./files/caddy/lab-caddyfile.j2"
+      caddy_porkbun_api_key: "{{ sops_dns.porkbun_api_key }}"
+      caddy_porkbun_secret_api_key: "{{ sops_dns.porkbun_secret_api_key }}"

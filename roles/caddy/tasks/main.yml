@@ -10,7 +10,7 @@
 
 - name: add the caddy config files
   ansible.builtin.template:
-    src: Caddyfile.j2
+    src: "{{ caddy_caddyfile_template }}"
     dest: "/etc/docker/caddy/Caddyfile"
     owner: root
     group: root
