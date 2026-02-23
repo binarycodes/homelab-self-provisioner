@@ -1,0 +1,20 @@
+- name: set computed facts
+  hosts: all
+  tasks:
+    - name: set normalized architecture fact
+      ansible.builtin.set_fact:
+        normalized_arch: >-
+          {{
+          'amd64' if ansible_facts['architecture'] == 'x86_64' else
+          'arm64' if ansible_facts['architecture'] == 'aarch64' else
+          ansible_facts['architecture']
+          }}
+
+- name: configure bootstrap server
+  hosts: all
+  become: true
+  roles:
+    - role: caddy
+      caddy_caddyfile_template: "./files/caddy/mgmt-caddyfile.j2"
+      caddy_porkbun_api_key: "{{ sops_dns.porkbun_api_key }}"
+      caddy_porkbun_secret_api_key: "{{ sops_dns.porkbun_secret_api_key }}"
