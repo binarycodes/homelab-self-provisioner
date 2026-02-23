@@ -1,0 +1,29 @@
+- name: create config directories
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    owner: root
+    group: root
+    mode: "0700"
+  with_items:
+    - /etc/haproxy
+
+- name: add setup files
+  ansible.builtin.copy:
+    src: haproxy-edge.container
+    dest: /etc/containers/systemd/haproxy-edge.container
+    owner: root
+    group: root
+    mode: "644"
+  notify:
+    - restart haproxy
+
+- name: add the caddy config files
+  ansible.builtin.copy:
+    src: haproxy.cfg
+    dest: /etc/haproxy/haproxy.cfg
+    owner: root
+    group: root
+    mode: "644"
+  notify:
+    - restart haproxy
