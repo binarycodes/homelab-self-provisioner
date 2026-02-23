@@ -3,8 +3,8 @@ proxmox.cloudyhome.net {
                   https://pve2.ip.cloudyhome.net:8006 \
                   https://pve3.ip.cloudyhome.net:8006 {
         lb_policy random
-        health_uri /api2/json/version
-        health_status 401
+        health_uri /
+        health_status 200
         health_interval 10s
         health_timeout 3s
 
