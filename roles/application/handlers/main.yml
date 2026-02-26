@@ -1,0 +1,11 @@
+- name: restart queued units | daemon-reload
+  listen: quadlet apply
+  ansible.builtin.systemd:
+    daemon_reload: true
+
+- name: restart queued units | restart units
+  listen: quadlet apply
+  ansible.builtin.systemd:
+    name: "{{ item }}"
+    state: restarted
+  loop: "{{ application_quadlet_units | default([]) | unique }}"

@@ -10,8 +10,13 @@
           ansible_facts['architecture']
           }}
 
-- name: configure media server
+- name: configure edge server
   hosts: all
   become: true
   roles:
-    - role: haproxy
+    - role: application
+      application_name: "haproxy-edge"
+      application_container_path: "{{ playbook_dir }}/apps/haproxy-edge/quadlet"
+      application_config_path: "{{ playbook_dir }}/apps/haproxy-edge/config"
+      application_quadlet_units:
+        - haproxy-edge

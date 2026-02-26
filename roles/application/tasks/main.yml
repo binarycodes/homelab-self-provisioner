@@ -1,0 +1,101 @@
+- name: assert required variables
+  ansible.builtin.assert:
+    that:
+      - application_name is defined
+      - application_container_path is defined
+      - application_config_path is defined
+      - application_quadlet_units is defined
+
+- name: ensure app root exists
+  ansible.builtin.file:
+    path: "{{ application_root }}/{{ application_name }}"
+    state: directory
+    owner: root
+    group: root
+    mode: "0755"
+
+- name: ensure quadlet root exists
+  ansible.builtin.file:
+    path: "{{ application_quadlet_root }}"
+    state: directory
+    owner: root
+    group: root
+    mode: "0755"
+
+- name: render quadlet templates
+  vars:
+    _tree: "{{ lookup('ansible.builtin.filetree', application_container_path, wantlist=True) }}"
+  block:
+    - name: ensure quadlet subdirs exist
+      ansible.builtin.file:
+        path: "{{ application_quadlet_root }}/{{ item.path | dirname }}"
+        state: directory
+        owner: root
+        group: root
+        mode: "0755"
+      loop: "{{ _tree }}"
+      when: item.state == 'directory'
+
+    - name: render quadlet files
+      ansible.builtin.template:
+        src: "{{ item.src }}"
+        dest: "{{ application_quadlet_root }}/{{ item.path | regex_replace('\\.j2$', '') }}"
+        owner: root
+        group: root
+        mode: "0644"
+      loop: "{{ _tree }}"
+      when: item.state == 'file'
+      notify: quadlet apply
+
+- name: render app config templates
+  vars:
+    _tree: "{{ lookup('ansible.builtin.filetree', application_config_path, wantlist=True) }}"
+    _dest_root: "{{ application_root }}/{{ application_name }}"
+  block:
+    - name: ensure app config subdirs exist
+      ansible.builtin.file:
+        path: "{{ _dest_root }}/{{ item.path | dirname }}"
+        state: directory
+        owner: root
+        group: root
+        mode: "0755"
+      loop: "{{ _tree }}"
+      when: item.state == 'directory'
+
+    - name: render app config files
+      ansible.builtin.template:
+        src: "{{ item.src }}"
+        dest: "{{ _dest_root }}/{{ item.path | regex_replace('\\.j2$', '') }}"
+        owner: root
+        group: root
+        mode: "0644"
+      loop: "{{ _tree }}"
+      when: item.state == 'file'
+      notify: quadlet apply
+
+- name: copy app assets
+  when: application_copy_path is defined
+  vars:
+    _tree: "{{ lookup('ansible.builtin.filetree', application_copy_path, wantlist=True) }}"
+    _dest_root: "{{ application_root }}/{{ application_name }}"
+  block:
+    - name: ensure app asset subdirs exist
+      ansible.builtin.file:
+        path: "{{ _dest_root }}/{{ item.path | dirname }}"
+        state: directory
+        owner: root
+        group: root
+        mode: "0755"
+      loop: "{{ _tree }}"
+      when: item.state == 'directory'
+
+    - name: copy app asset files
+      ansible.builtin.copy:
+        src: "{{ item.src }}"
+        dest: "{{ _dest_root }}/{{ item.path }}"
+        owner: root
+        group: root
+        mode: preserve
+      loop: "{{ _tree }}"
+      when: item.state == 'file'
+      notify: quadlet apply
