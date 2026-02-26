@@ -21,7 +21,7 @@
         - gpg
         - net-tools
         - nfs-common
-        - python3-debian #required by ansible.builtin.deb822_repository module
+        - python3-debian # required by ansible.builtin.deb822_repository module
         - qemu-guest-agent
         - systemd-container
       system_remove_packages:
