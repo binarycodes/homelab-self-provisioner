@@ -8,7 +8,6 @@ ContainerName=gh-runner-%i
 Image=docker.io/binarycodes/github-runner:2.333.1
 EnvironmentFile={{ application_root }}/{{ application_name }}/env
 Volume={{ application_root }}/{{ application_name }}/app.private-key.pem:/etc/github-runner/app.private-key.pem:ro,Z
-Network=gh-runner.network
 PodmanArgs=--rm
 
 [Service]
@@ -19,10 +18,6 @@ StandardError=journal
 LogLevelMax=info
 
 # Hardening
-NoNewPrivileges=yes
-PrivateTmp=yes
-ProtectSystem=full
-ProtectKernelModules=yes
 ProtectKernelLogs=yes
 RestrictRealtime=yes
 
