@@ -2,6 +2,5 @@
   hosts: all
   become: true
   roles:
-    - role: docker
     - role: podman
       podman_default_subnet: "172.18.18.0/24"
