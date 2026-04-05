@@ -20,7 +20,16 @@
       nfs_server: "{{ sops_app.immich_nfs_server }}"
       nfs_export: "{{ sops_app.immich_nfs_export }}"
 
-    - role: immich
+    - role: application
+      application_name: "immich"
+      application_container_path: "{{ playbook_dir }}/apps/immich/quadlet"
+      application_config_path: "{{ playbook_dir }}/apps/immich/config"
+      application_quadlet_units:
+        - immich-database
+        - immich-frame
+        - immich-machine-learning
+        - immich-redis
+        - immich-server
       immich_db_password: "{{ sops_app.immich_db_password }}"
       immich_timezone: "{{ sops_general.timezone }}"
       immich_server_url: "{{ sops_app.immich_server_url }}"

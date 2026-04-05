@@ -1,0 +1,20 @@
+[Unit]
+Description=Immich Server
+After=immich-redis.service immich-database.service immich-machine-learning.service
+Requires=immich-redis.service immich-database.service
+Wants=immich-machine-learning.service
+
+[Container]
+ContainerName=immich_server
+Image=ghcr.io/immich-app/immich-server:${IMMICH_VERSION:-release}
+Network=immich.network
+Volume=${UPLOAD_LOCATION}:/data
+Volume=/etc/localtime:/etc/localtime:ro
+PublishPort=2283:2283
+EnvironmentFile=/var/lib/cloudyhome/apps/immich/config/env
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

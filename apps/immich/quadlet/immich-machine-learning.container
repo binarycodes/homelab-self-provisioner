@@ -1,0 +1,15 @@
+[Unit]
+Description=Immich Machine Learning
+
+[Container]
+ContainerName=immich_machine_learning
+Image=ghcr.io/immich-app/immich-machine-learning:${IMMICH_VERSION:-release}
+Network=immich.network
+Volume=immich-model-cache.volume:/cache
+EnvironmentFile=/var/lib/cloudyhome/apps/immich/config/env
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
