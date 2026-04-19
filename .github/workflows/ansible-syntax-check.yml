@@ -1,0 +1,40 @@
+name: ansible-syntax-check
+
+on:
+  push:
+    branches: ['*']
+
+jobs:
+  build:
+    name: ansible syntax check
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: set up python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: install ansible
+        run: pip install ansible
+
+      - name: install collections
+        run: ansible-galaxy collection install -r requirements.yml
+
+      - name: run syntax check on all playbooks
+        env:
+          ANSIBLE_LOG_PATH: /tmp/ansible.log
+        run: |
+          ignore=(
+            requirements.yml
+          )
+          shopt -s nullglob
+          playbooks=()
+          for f in *.yml; do
+            if [[ " ${ignore[*]} " == *" $f "* ]]; then
+              continue
+            fi
+            playbooks+=("$f")
+          done
+          ansible-playbook --syntax-check "${playbooks[@]}"

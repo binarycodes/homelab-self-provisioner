@@ -15,10 +15,9 @@
   become: true
   roles:
     - role: application
-      application_name: "caddy-mgmt"
-      application_container_path: "{{ playbook_dir }}/apps/caddy-mgmt/quadlet"
-      application_config_path: "{{ playbook_dir }}/apps/caddy-mgmt/config"
-      application_quadlet_units:
-        - caddy-mgmt
-      caddy_porkbun_api_key: "{{ sops_dns.porkbun_api_key }}"
-      caddy_porkbun_secret_api_key: "{{ sops_dns.porkbun_secret_api_key }}"
+      applications:
+        - name: caddy-mgmt
+          quadlet_units:
+            - caddy-mgmt
+          caddy_porkbun_api_key: "{{ sops_dns.porkbun_api_key }}"
+          caddy_porkbun_secret_api_key: "{{ sops_dns.porkbun_secret_api_key }}"

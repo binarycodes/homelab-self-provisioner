@@ -15,8 +15,7 @@
   become: true
   roles:
     - role: application
-      application_name: "haproxy-edge"
-      application_container_path: "{{ playbook_dir }}/apps/haproxy-edge/quadlet"
-      application_config_path: "{{ playbook_dir }}/apps/haproxy-edge/config"
-      application_quadlet_units:
-        - haproxy-edge
+      applications:
+        - name: haproxy-edge
+          quadlet_units:
+            - haproxy-edge

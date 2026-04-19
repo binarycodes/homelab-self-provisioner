@@ -8,8 +8,8 @@ StartLimitIntervalSec=300
 [Container]
 ContainerName=gh-runner-%i
 Image=docker.io/binarycodes/github-runner:2.333.1
-EnvironmentFile={{ application_root }}/{{ application_name }}/env
-Volume={{ application_root }}/{{ application_name }}/app.private-key.pem:/etc/github-runner/app.private-key.pem:ro,Z
+EnvironmentFile={{ application_root }}/{{ app.name }}/env
+Volume={{ application_root }}/{{ app.name }}/app.private-key.pem:/etc/github-runner/app.private-key.pem:ro,Z
 LogDriver=journald
 
 [Service]
