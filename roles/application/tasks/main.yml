@@ -45,7 +45,7 @@
         mode: "0644"
       loop: "{{ _tree }}"
       when: item.state == 'file'
-      notify: quadlet apply
+      notify: "application : quadlet apply"
 
 - name: render app config templates
   vars:
@@ -71,7 +71,7 @@
         mode: "0644"
       loop: "{{ _tree }}"
       when: item.state == 'file'
-      notify: quadlet apply
+      notify: "application : quadlet apply"
 
 - name: copy app assets
   when: application_copy_path is defined
@@ -98,4 +98,4 @@
         mode: preserve
       loop: "{{ _tree }}"
       when: item.state == 'file'
-      notify: quadlet apply
+      notify: "application : quadlet apply"
