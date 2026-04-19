@@ -35,7 +35,11 @@
       immich_server_url: "{{ sops_app.immich_server_url }}"
       immich_frame_api_key: "{{ sops_app.immich_frame_api_key }}"
 
-    - role: caddy
-      caddy_caddyfile_template: "./files/caddy/lab-caddyfile.j2"
+    - role: application
+      application_name: "caddy-lab"
+      application_container_path: "{{ playbook_dir }}/apps/caddy-lab/quadlet"
+      application_config_path: "{{ playbook_dir }}/apps/caddy-lab/config"
+      application_quadlet_units:
+        - caddy-lab
       caddy_porkbun_api_key: "{{ sops_dns.porkbun_api_key }}"
       caddy_porkbun_secret_api_key: "{{ sops_dns.porkbun_secret_api_key }}"
