@@ -6,7 +6,7 @@ ContainerName=immich_machine_learning
 Image=ghcr.io/immich-app/immich-machine-learning:${IMMICH_VERSION:-release}
 Network=immich.network
 Volume=immich-model-cache.volume:/cache
-EnvironmentFile=/var/lib/cloudyhome/apps/immich/config/env
+EnvironmentFile=/var/lib/cloudyhome/apps/immich/env
 
 [Service]
 Restart=always

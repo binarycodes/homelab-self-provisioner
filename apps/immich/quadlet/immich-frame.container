@@ -7,10 +7,10 @@ After=immich-server.service
 ContainerName=immichframe
 Image=ghcr.io/immichframe/immichframe:latest
 Network=immich.network
-Volume=/var/lib/cloudyhome/apps/immich/config/Settings.yml:/app/Config/Settings.yml:ro
+Volume=/var/lib/cloudyhome/apps/immich/Settings.yml:/app/Config/Settings.yml:ro
 PublishPort=8080:8080
 Environment=IMMICHFRAME_CONFIG_PATH=/app/Config
-EnvironmentFile=/var/lib/cloudyhome/apps/immich/config/env
+EnvironmentFile=/var/lib/cloudyhome/apps/immich/env
 
 [Service]
 Restart=always

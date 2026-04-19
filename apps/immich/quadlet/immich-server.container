@@ -11,7 +11,7 @@ Network=immich.network
 Volume=${UPLOAD_LOCATION}:/data
 Volume=/etc/localtime:/etc/localtime:ro
 PublishPort=2283:2283
-EnvironmentFile=/var/lib/cloudyhome/apps/immich/config/env
+EnvironmentFile=/var/lib/cloudyhome/apps/immich/env
 
 [Service]
 Restart=always

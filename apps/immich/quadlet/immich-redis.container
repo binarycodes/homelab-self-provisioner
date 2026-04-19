@@ -6,7 +6,7 @@ ContainerName=immich_redis
 Image=docker.io/valkey/valkey:9@sha256:fb8d272e529ea567b9bf1302245796f21a2672b8368ca3fcb938ac334e613c8f
 Network=immich.network
 HealthCmd=redis-cli ping || exit 1
-EnvironmentFile=/var/lib/cloudyhome/apps/immich/config/env
+EnvironmentFile=/var/lib/cloudyhome/apps/immich/env
 
 [Service]
 Restart=always
