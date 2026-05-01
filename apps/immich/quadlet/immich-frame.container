@@ -14,6 +14,9 @@ EnvironmentFile=/var/lib/cloudyhome/apps/immich/env
 
 [Service]
 Restart=always
+RestartSec=10s
+StartLimitBurst=20
+StartLimitIntervalSec=600
 
 [Install]
 WantedBy=multi-user.target

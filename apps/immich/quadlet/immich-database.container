@@ -9,6 +9,11 @@ NetworkAlias=database
 Volume=${DB_DATA_LOCATION}:/var/lib/postgresql/data
 EnvironmentFile=/var/lib/cloudyhome/apps/immich/env
 ShmSize=128m
+HealthCmd=/bin/sh -c 'pg_isready --dbname="$${DB_DATABASE_NAME}" --username="$${DB_USERNAME}" || exit 1'
+HealthInterval=10s
+HealthStartPeriod=20s
+HealthRetries=10
+Notify=healthy
 
 [Service]
 EnvironmentFile=/var/lib/cloudyhome/apps/immich/env
