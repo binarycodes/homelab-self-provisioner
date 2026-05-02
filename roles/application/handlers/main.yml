@@ -8,4 +8,5 @@
   ansible.builtin.systemd:
     name: "{{ item }}"
     state: restarted
+    enabled: true
   loop: "{{ application_quadlet_units | default([]) | unique }}"

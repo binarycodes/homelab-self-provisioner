@@ -8,25 +8,22 @@
 - name: "{{ app.name }} | resolve per-app paths"
   ansible.builtin.set_fact:
     _app_container_path: "{{ app.container_path | default(playbook_dir ~ '/apps/' ~ app.name ~ '/quadlet') }}"
+    _app_unit_path: "{{ app.unit_path | default(playbook_dir ~ '/apps/' ~ app.name ~ '/unit') }}"
     _app_config_path: "{{ app.config_path | default(playbook_dir ~ '/apps/' ~ app.name ~ '/config') }}"
     _app_copy_path: "{{ app.copy_path | default(playbook_dir ~ '/apps/' ~ app.name ~ '/copy') }}"
     _app_dest_root: "{{ application_root }}/{{ app.name }}"
 
-- name: "{{ app.name }} | ensure app root exists"
+- name: "{{ app.name }} | ensure directories exists"
   ansible.builtin.file:
-    path: "{{ _app_dest_root }}"
+    path: "{{ item }}"
     state: directory
     owner: root
     group: root
     mode: "0755"
-
-- name: "{{ app.name }} | ensure quadlet root exists"
-  ansible.builtin.file:
-    path: "{{ application_quadlet_root }}"
-    state: directory
-    owner: root
-    group: root
-    mode: "0755"
+  with_items:
+    - "{{ _app_dest_root }}"
+    - "{{ application_quadlet_root }}"
+    - "{{ application_unit_root }}"
 
 - name: "{{ app.name }} | render quadlet templates"
   vars:
@@ -52,6 +49,33 @@
       loop: "{{ _tree }}"
       when: item.state == 'file'
       notify: "application : quadlet apply"
+
+
+- name: "{{ app.name }} | render unit templates"
+  vars:
+    _tree: "{{ lookup('ansible.builtin.filetree', _app_unit_path, wantlist=True) }}"
+  block:
+    - name: "{{ app.name }} | ensure unit subdirs exist"
+      ansible.builtin.file:
+        path: "{{ application_unit_root }}/{{ item.path | dirname }}"
+        state: directory
+        owner: root
+        group: root
+        mode: "0755"
+      loop: "{{ _tree }}"
+      when: item.state == 'directory'
+
+    - name: "{{ app.name }} | render unit files"
+      ansible.builtin.template:
+        src: "{{ item.src }}"
+        dest: "{{ application_unit_root }}/{{ item.path | regex_replace('\\.j2$', '') }}"
+        owner: root
+        group: root
+        mode: "0644"
+      loop: "{{ _tree }}"
+      when: item.state == 'file'
+      notify: "application : quadlet apply"
+
 
 - name: "{{ app.name }} | render app config templates"
   vars:

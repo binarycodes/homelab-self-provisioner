@@ -18,9 +18,7 @@
       applications:
         - name: github-runner
           quadlet_units:
-            - gh-runner@1.service
-            - gh-runner@2.service
-            - gh-runner@3.service
+            - gh-runners.target
           github_runner_url: "{{ sops_gh.gh_runner_url }}"
           github_runner_token: "{{ sops_gh.gh_runner_token }}"
           github_runner_app_id: "{{ sops_gh.gh_runner_app_id }}"
