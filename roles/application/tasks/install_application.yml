@@ -42,7 +42,7 @@
   block:
     - name: "{{ app.name }} | ensure quadlet subdirs exist"
       ansible.builtin.file:
-        path: "{{ application_quadlet_root }}/{{ item.path | dirname }}"
+        path: "{{ application_quadlet_root }}/{{ item.path }}"
         state: directory
         owner: root
         group: root
@@ -68,7 +68,7 @@
   block:
     - name: "{{ app.name }} | ensure unit subdirs exist"
       ansible.builtin.file:
-        path: "{{ application_unit_root }}/{{ item.path | dirname }}"
+        path: "{{ application_unit_root }}/{{ item.path }}"
         state: directory
         owner: root
         group: root
@@ -94,7 +94,7 @@
   block:
     - name: "{{ app.name }} | ensure app config subdirs exist"
       ansible.builtin.file:
-        path: "{{ _app_dest_root }}/{{ item.path | dirname }}"
+        path: "{{ _app_dest_root }}/{{ item.path }}"
         state: directory
         owner: root
         group: root
@@ -120,7 +120,7 @@
   block:
     - name: "{{ app.name }} | ensure app asset subdirs exist"
       ansible.builtin.file:
-        path: "{{ _app_dest_root }}/{{ item.path | dirname }}"
+        path: "{{ _app_dest_root }}/{{ item.path }}"
         state: directory
         owner: root
         group: root
