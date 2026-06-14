@@ -10,15 +10,17 @@
           ansible_facts['architecture']
           }}
 
-- name: configure primary dns server
+- name: configure secondary dns server
   hosts: all
   become: true
   roles:
-    - role: bind9
-      bind9_zone: "{{ sops_dns.zone }}"
-      bind9_tsig: "{{ sops_dns.tsig }}"
-      bind9_master_ip: "{{ sops_dns.master_ip }}"
-      bind9_slave_ip: "{{ sops_dns.slave_ip }}"
-      bind9_timezone: "{{ sops_general.timezone }}"
-      bind9_master: false
-      bind9_slave: true
+    - role: application
+      applications:
+        - name: bind9-slave
+          quadlet_units:
+            - bind9
+          bind9_zone: "{{ sops_dns.zone }}"
+          bind9_tsig: "{{ sops_dns.tsig }}"
+          bind9_master_ip: "{{ sops_dns.master_ip }}"
+          bind9_slave_ip: "{{ sops_dns.slave_ip }}"
+          bind9_timezone: "{{ sops_general.timezone }}"
