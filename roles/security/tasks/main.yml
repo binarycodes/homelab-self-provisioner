@@ -8,10 +8,11 @@
       PasswordAuthentication no
       PermitRootLogin no
       X11Forwarding no
-      LoginGraceTime 30
-      MaxAuthTries 2
-      MaxSessions 2
-      MaxStartups 2
+      LoginGraceTime 10
+      MaxAuthTries 3
+      MaxSessions 5
+      MaxStartups 20:50:60
+      PerSourceMaxStartups 20
       PubkeyAcceptedAlgorithms ssh-ed25519-cert-v01@openssh.com,rsa-sha2-512-cert-v01@openssh.com
       HostKeyAlgorithms ssh-ed25519-cert-v01@openssh.com
       PrintMotd no
