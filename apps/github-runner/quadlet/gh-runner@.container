@@ -11,6 +11,7 @@ Image=docker.io/binarycodes/github-runner:latest
 EnvironmentFile={{ application_root }}/{{ app.name }}/env
 Volume={{ application_root }}/{{ app.name }}/app.private-key.pem:/etc/github-runner/app.private-key.pem:ro,Z
 LogDriver=journald
+AutoUpdate=registry
 
 [Service]
 Restart=always

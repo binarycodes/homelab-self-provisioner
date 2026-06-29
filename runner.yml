@@ -25,3 +25,10 @@
           github_runner_client_id: "{{ sops_gh.gh_runner_client_id }}"
           github_runner_installation_id: "{{ sops_gh.gh_runner_installation_id }}"
           github_runner_private_key: "{{ sops_gh.gh_runner_private_key }}"
+
+  post_tasks:
+    - name: enable the podman auto-update timer
+      ansible.builtin.systemd:
+        name: podman-auto-update.timer
+        enabled: true
+        state: started
