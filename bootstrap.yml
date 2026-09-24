@@ -21,3 +21,8 @@
             - caddy-mgmt
           caddy_porkbun_api_key: "{{ sops_dns.porkbun_api_key }}"
           caddy_porkbun_secret_api_key: "{{ sops_dns.porkbun_secret_api_key }}"
+
+        - name: unifi-server-os
+          quadlet_units:
+            - unifi-os-server
+          unifi_system_ip: uos.ip.cloudyhome.net
